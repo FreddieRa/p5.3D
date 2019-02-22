@@ -18,7 +18,7 @@
 // =============================================================================
 //                         p5.3D
 // =============================================================================
-Letter3D = function(letter, depth, size, resolution, bevelled = true, font = "Georgia", style = BOLD) {
+p5.prototype.Letter3D = function(letter, depth, size, resolution, bevelled = true, font = "Georgia", style = BOLD) {
 	this.letter = letter; // Letter
 	this.depth = depth; // Depth in the z axis
 	this.size = size; // Size that each "pixel" (cube) is
@@ -36,12 +36,12 @@ Letter3D = function(letter, depth, size, resolution, bevelled = true, font = "Ge
 
 		// Draw the given character in the centre
 		test.textAlign(CENTER, CENTER);
-		test.textSize(this.res * 6 / 5)
+		test.textSize(this.res * 6 / 5);
 		test.textFont(font);
 		test.textStyle(style);
 		test.background(255);
 		test.text(this.letter, test.width / 2, test.height / 2);
-		this.edges = [this.res, 0]
+		this.edges = [this.res, 0];
 
 
 		// Put all of the non-white pixels in an array as 1s
@@ -60,7 +60,7 @@ Letter3D = function(letter, depth, size, resolution, bevelled = true, font = "Ge
 		}
 
 		// Constrain is needed for characters like "space" that otherwise have a negative width
-		this.width = constrain(this.edges[1] - this.edges[0] + 4, 18, 34)
+		this.width = constrain(this.edges[1] - this.edges[0] + 4, 18, 34);
 
 
 		return array;
@@ -70,7 +70,7 @@ Letter3D = function(letter, depth, size, resolution, bevelled = true, font = "Ge
 	this.rects = getRects(this.array, this.bevelled);
 
 	this.show = function() {
-		push()
+		push();
 		for (var Rect of this.rects) {
 			var w = Rect.x2 - Rect.x1 + 1;
 			var h = Rect.y2 - Rect.y1 + 1;
@@ -84,14 +84,14 @@ Letter3D = function(letter, depth, size, resolution, bevelled = true, font = "Ge
 
 			pop();
 
-		}
-		pop()
-	}
+		};
+		pop();
+	};
 
-}
+};
 
 
-Word3D = function(string, depth, size, resolution, bevelled = true, font = "Georgia", style = BOLD) {
+p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true, font = "Georgia", style = BOLD) {
 	this.string = string;
 	this.depth = depth;
 	this.size = size;
@@ -106,32 +106,32 @@ Word3D = function(string, depth, size, resolution, bevelled = true, font = "Geor
 		for (var i = 0; i < string.length; i++) {
 			var temp = new Letter3D(
 				string[i], this.depth, this.size, this.res, this.bevelled, this.font, this.style
-			)
-			this.width += temp.width
-			array.push(temp)
+			);
+			this.width += temp.width;
+			array.push(temp);
 		}
 		this.letters = array;
 	}
 
-	this.create()
+	this.create();
 
 	this.setText = function(string) {
 		this.string = string;
-		this.create()
+		this.create();
 	}
 
 	this.show = function() {
-		push()
-		translate(-this.width * this.size * 0.5, 0, 0) // Centre the word
+		push();
+		translate(-this.width * this.size * 0.5, 0, 0); // Centre the word
 		for (var letter of this.letters) {
-			letter.show()
-			translate((letter.width) * this.size, 0, 0) // Kerning to make sure that each letter is close to one another
+			letter.show();
+			translate((letter.width) * this.size, 0, 0); // Kerning to make sure that each letter is close to one another
 		}
-		pop()
+		pop();
 	}
 }
 
-Picture3D = function(picture, depth, size, resScale, bevelled = false) {
+p5.prototype.Picture3D = function(picture, depth, size, resScale, bevelled = false) {
 	this.picture = picture; // Letter
 	this.depth = depth; // Depth in the z axis
 	this.size = size; // Size that each "pixel" (cube) is
@@ -151,7 +151,7 @@ Picture3D = function(picture, depth, size, resScale, bevelled = false) {
 
 
 		// Put all of the non-white pixels in an array as 1s
-		test.loadPixels()
+		test.loadPixels();
 		for (var x = 0; x < test.width - 1; x++) {
 			array.push([]);
 			for (var y = 0; y < test.height - 1; y++) {
@@ -188,7 +188,7 @@ Picture3D = function(picture, depth, size, resScale, bevelled = false) {
 	}
 }
 
-Drawing3D = function(canvas, renderer, depth, size, resScale, bevelled = false) {
+p5.prototype.Drawing3D = function(canvas, renderer, depth, size, resScale, bevelled = false) {
 	this.drawing = canvas; // Letter
 	this.depth = depth; // Depth in the z axis
 	this.size = size; // Size that each "pixel" (cube) is
@@ -203,7 +203,7 @@ Drawing3D = function(canvas, renderer, depth, size, resScale, bevelled = false) 
 		var array = [];
 
 		// Put all of the non-white pixels in an array as 1s
-		test.loadPixels()
+		test.loadPixels();
 		for (var x = 0; x < test.width - 5; x++) {
 			array.push([]);
 			for (var y = 0; y < test.height - 1; y++) {
@@ -223,7 +223,7 @@ Drawing3D = function(canvas, renderer, depth, size, resScale, bevelled = false) 
 	this.rects = getRects(this.array, this.bevelled);
 
 	this.show = function() {
-		renderer.translate(-renderer.width * 1.8, -renderer.height * 1.8)
+		renderer.translate(-renderer.width * 1.8, -renderer.height * 1.8);
 		for (var Rect of this.rects) {
 			var w = Rect.x2 - Rect.x1 + 1;
 			var h = Rect.y2 - Rect.y1 + 1;
@@ -242,10 +242,10 @@ Drawing3D = function(canvas, renderer, depth, size, resScale, bevelled = false) 
 }
 
 
-function getRects(array, bevel) {
-	var mat = array
+p5.prototype.function getRects(array, bevel) {
+	var mat = array;
 	var inner = Array(mat.length).fill(0).map(x => Array(mat.length).fill(0));
-	var rects = []
+	var rects = [];
 
 	if (bevel) {
 		for (var x = 0; x < mat.length; x++) {
@@ -259,15 +259,15 @@ function getRects(array, bevel) {
 		}
 		for (var item of getRects1(inner)) {
 			item.b = 1.5;
-			rects.push(item)
+			rects.push(item);
 		}
 	}
 	for (var item of getRects1(array)) {
 		item.b = 1;
-		rects.push(item)
+		rects.push(item);
 	}
 
-	return rects
+	return rects;
 }
 
 function getRects1(array) {
@@ -347,8 +347,8 @@ function getRects1(array) {
 			}
 		}
 	}
-	return rects
-}
+	return rects;
+};
 
 
 //})();
