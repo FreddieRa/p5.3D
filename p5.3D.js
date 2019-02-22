@@ -26,12 +26,13 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
 	this.resY = resolution;
 	this.bevelled = bevelled;
 
+	this.edges = [this.resX, 0]
 	this.width = 0;
 
 	this.toArray = function(graphic) {
-		var array = []
+		var array = [];
 		// Put all of the non-white pixels in an array as 1s
-		graphic.loadPixels()
+		graphic.loadPixels();
 		for (var x = 0; x < graphic.width; x++) {
 			array.push([]);
 			for (var y = 0; y < graphic.height; y++) {
@@ -51,15 +52,15 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
 		return array;
 	}
 
-	this.array = this.toArray(this.create());
-	this.rects = getRects(this.array, this.bevelled);
+	//this.array = this.toArray(this.create());
+	//this.rects = getRects(this.array, this.bevelled);
 
 	this.modX = function() {
-		return this.resX / 2
+		return (this.resX / 2)
 	}
 
 	this.modY = function() {
-		return this.resY / 2
+		return (this.resY / 2)
 	}
 
 	this.show = function() {
@@ -74,23 +75,21 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
 
 			translate((xPos - this.modX()) * this.size, (yPos - this.modY()) * this.size, 0);
 			box(w * this.size, h * this.size, this.depth * this.size * Rect.b);
-
 			pop();
-		};
+		}
 		pop();
-	};
+	}
 }
 
 
 p5.prototype.Letter3D = function(letter, depth, size, resolution, bevelled = true, font = "Georgia", style = BOLD) {
-	call p5.prototype.Object3D(this, depth, size, resolution, bevelled)
+	this.letter = letter;
 	this.font = font;
 	this.style = style;
 
 	this.create = function() {
 		// Create the 2D graphic
 		var graphic = createGraphics(this.resX, this.resY);
-
 		// Draw the given character in the centre
 		graphic.textAlign(CENTER, CENTER);
 		graphic.textSize(this.resX * 6 / 5);
@@ -99,8 +98,12 @@ p5.prototype.Letter3D = function(letter, depth, size, resolution, bevelled = tru
 		graphic.background(255);
 		graphic.text(this.letter, graphic.width / 2, graphic.height / 2);
 
-		return graphic
+		return graphic;
 	}
+
+	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
+	this.array = this.toArray(this.create());
+	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 
 	this.modX = function() {
 		return this.edges[0]
@@ -111,23 +114,30 @@ p5.prototype.Letter3D = function(letter, depth, size, resolution, bevelled = tru
 p5.prototype.Letter3D.prototype = Object.create(p5.prototype.Object3D.prototype);
 
 p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true, font = "Georgia", style = BOLD) {
-	call p5.prototype.Letter3D(this, string[0] size, resolution, bevelled, font, style)
 	this.string = string;
+	this.depth = depth;
+	this.size = size;
+	this.res = resolution;
+	this.bevelled = bevelled;
+	this.font = font;
+	this.style = style;
+	this.width = 0;
 
 	this.create = function() {
 		var array = [];
 		this.width = 0;
 		for (var i = 0; i < string.length; i++) {
-			var temp = new Letter3D(
+			var temp = new p5.prototype.Letter3D(
 				string[i], this.depth, this.size, this.res, this.bevelled, this.font, this.style
 			);
 			this.width += temp.width;
 			array.push(temp);
 		}
-		this.letters = array;
+		//for(var item of array){print(JSON.stringify(item))}
+		return array;
 	}
 
-	this.create();
+	this.letters = this.create();
 
 	this.setText = function(string) {
 		this.string = string;
@@ -145,12 +155,8 @@ p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true,
 	}
 }
 
-// Adding Word3D as a child of Letter3D
-p5.prototype.Word3D.prototype = Object.create(p5.prototype.Letter3D.prototype);
-
 
 p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = false) {
-	call p5.prototype.Object3D(this, depth, size, resolution, bevelled)
 	this.picture = picture; // Letter
 
 	this.create = function() {
@@ -163,6 +169,14 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
 
 		return graphic;
 	}
+
+	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
+
+	this.resX = this.picture.width*resolution;
+	this.resY = this.picture.height*resolution;
+
+	this.array = this.toArray(this.create());
+	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 }
 
 // Adding Picture3D as a child of Object3D
@@ -170,11 +184,19 @@ p5.prototype.Picture3D.prototype = Object.create(p5.prototype.Object3D.prototype
 
 
 p5.prototype.Drawing3D = function(canvas, renderer, depth, size, resolution, bevelled = false) {
-	call p5.prototype.Object3D(this, depth, size, resolution, bevelled)
+	this.drawing = canvas;
 
 	this.create = function() {
 		return this.drawing;
 	}
+
+	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
+
+	this.resX = this.drawing.width*resolution;
+	this.resY = this.drawing.height*resolution;
+
+	this.array = this.toArray(this.create());
+	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 }
 
 // Adding Drawing3D as a child of Object3D
@@ -291,4 +313,5 @@ function getRects1(array) {
 };
 
 
-// 
+//
+//
