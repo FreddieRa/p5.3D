@@ -8,6 +8,7 @@ There are currently 4 differnt 3D objects available:
  - Canvas3D
 
 All of these work by generating a canvas using "createGraphics()", and passing that into the Object3D class. This then converts that into an array of 1s and 0s (where black or dark gray pixels are 1s, everything else a 0), onto which a number of rectangles are mapped to minimize the number of primitives needing to be drawn.
+(Note: The examples shown do not use the exact library shown here, they are just for demonstration of the results)
 
 ## Usage
 
@@ -43,7 +44,7 @@ letterObject = Letter3D(
   style            // [OPTIONAL, default = BOLD] Gives the chosen style out of BOLD, NORMAL, ITALIC  
 )
 ```
-
+Example: https://www.openprocessing.org/sketch/669863
 
 ## Word3D
 
@@ -66,8 +67,9 @@ wordObject = word3D(
 )
 ```
 
-## Picture3D
+Example: https://www.openprocessing.org/sketch/669863
 
+## Picture3D
 
 
 ![Image of Picture](https://github.com/FreddieRa/p5.3D/blob/master/assets/picture3D.png?)
@@ -84,6 +86,8 @@ letterObject = Letter3D(
   bevelled,     // [OPTIONAL, default = true] Gives the bevelled, embossed 3D look (as seen in screenshot)  
 )
 ```
+
+Example: https://www.openprocessing.org/sketch/673102
 
 ## Canvas3D
 
@@ -102,6 +106,8 @@ canvasObject = Canvas3D(
   bevelled,     // [OPTIONAL, default = true] Gives the bevelled, embossed 3D look (as seen in screenshot)  
 )
 ```
+
+Example: https://www.openprocessing.org/sketch/673354
 
 # Adding Your Own Implementation
 
