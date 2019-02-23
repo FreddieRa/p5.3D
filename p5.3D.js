@@ -14,7 +14,6 @@
  *
  *
  */
-//(function() {
 // =============================================================================
 //                         p5.3D
 // =============================================================================
@@ -22,22 +21,24 @@
 p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
 	this.depth = depth; // Depth in the z axis
 	this.size = size; // Size that each "pixel" (cube) is
-	this.resX = resolution; // Number of cubes per character (higher is more detailed)
-	this.resY = resolution;
-	this.bevelled = bevelled;
+	this.resX = resolution; // Size of graphic on which it's rendered (x-axis)
+	this.resY = resolution; // Size of graphic on which it's rendered (y-axis)
+	this.bevelled = bevelled; // Whether or not it has the inner emboss for 3D
 
-	this.edges = [this.resX, 0]
-	this.width = 0;
+	this.edges = [this.resX, 0] // Index of left and right-most pixel
+	this.width = 0; // Total width of actual result (not including white pixels)
 
 	this.toArray = function(graphic, mod = 0) {
 		var array = [];
+    graphic.loadPixels();
 		// Put all of the non-white pixels in an array as 1s
-		graphic.loadPixels();
+    // Mod needed for images otherwise they get a trailing line of pixels
 		for (var x = 0; x < graphic.width - mod; x++) {
 			array.push([]);
 			for (var y = 0; y < graphic.height - mod; y++) {
 				if (graphic.get(x, y)[0] <= 60) {
 					array[x].push(1);
+          // Update edges
 					this.edges[0] = x < this.edges[0] ? x : this.edges[0];
 					this.edges[1] = x > this.edges[1] ? x : this.edges[1];
 				} else {
@@ -46,14 +47,19 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
 			}
 		}
 
-		// Constrain is needed for characters like "space" that otherwise have a negative width
-		this.width = constrain(Math.abs(this.edges[1] - this.edges[0] + 4), 10, this.resX * 1.1);
+		// Constrain is needed for characters like "space" that otherwise
+    // have a negative width
+		this.width = constrain(
+      Math.abs(this.edges[1] - this.edges[0] + 4),
+      this.resX * 0.4,
+      this.resX * 1.1
+    );
 
 		return array;
 	}
 
-	//this.array = this.toArray(this.create());
-	//this.rects = getRects(this.array, this.bevelled);
+  // modX and modY are needed so implementations can customise how
+  // they're centred (e.g. letter3D)
 
 	this.modX = function() {
 		return (this.resX / 2)
@@ -63,17 +69,20 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
 		return (this.resY / 2)
 	}
 
+  // this.rects doesn't exist in the base implementation, it's created by
+  // the child class (this means that something cannot be a pure Object3D)
 	this.show = function() {
 		push();
 		for (var Rect of this.rects) {
 			var w = Rect.x2 - Rect.x1 + 1;
 			var h = Rect.y2 - Rect.y1 + 1;
-			var xPos = Rect.x1 + w / 2;
-			var yPos = Rect.y1 + h / 2;
+			var xPos = Rect.x1 + w / 2 - this.modX();
+			var yPos = Rect.y1 + h / 2 - this.modY();
 
 			push();
 
-			translate((xPos - this.modX()) * this.size, (yPos - this.modY()) * this.size, 0);
+			translate(xPos * this.size, yPos * this.size, 0);
+      // Rect.b here is either 1 or 1.5, depending on whether bevelled is true
 			box(w * this.size, h * this.size, this.depth * this.size * Rect.b);
 			pop();
 		}
@@ -93,18 +102,21 @@ p5.prototype.Letter3D = function(letter, depth, size, resolution, bevelled = tru
 		// Draw the given character in the centre
 		graphic.textAlign(CENTER, CENTER);
 		graphic.textSize(this.resX * 6 / 5);
-		graphic.textFont(font);
-		graphic.textStyle(style);
+		graphic.textFont(this.font);
+		graphic.textStyle(this.style);
 		graphic.background(255);
 		graphic.text(this.letter, graphic.width / 2, graphic.height / 2);
 
 		return graphic;
 	}
 
+  // Load in attributes and functions from Object3D
 	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
+  // Create the array using its own "create()" and Object3D's "toArray()"
 	this.array = this.toArray(this.create());
 	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 
+  // Custom "modX()"" function so that Word3D can centre letters properly
 	this.modX = function() {
 		return this.edges[0]
 	}
@@ -149,7 +161,8 @@ p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true,
 		translate(-this.width * this.size * 0.5, 0, 0); // Centre the word
 		for (var letter of this.letters) {
 			letter.show();
-			translate((letter.width) * this.size, 0, 0); // Kerning to make sure that each letter is close to one another
+      // Kerning to make sure that each letter is close to one another
+			translate((letter.width) * this.size, 0, 0);
 		}
 		pop();
 	}
@@ -172,9 +185,11 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
 
 	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
 
+  // Redefine the resolution as a scaling of the width and height
 	this.resX = this.picture.width*resolution;
 	this.resY = this.picture.height*resolution;
 
+  // Create the array using its own "create()" and Object3D's "toArray()"
 	this.array = this.toArray(this.create(), 1);
 	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 }
@@ -192,16 +207,17 @@ p5.prototype.Canvas3D = function(canvas, renderer, depth, size, resolution, beve
 
 	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
 
+  // Redefine the resolution as a scaling of the width and height
 	this.resX = this.canvas.width*resolution;
 	this.resY = this.canvas.height*resolution;
 
+  // Create the array using its own "create()" and Object3D's "toArray()"
 	this.array = this.toArray(this.create());
 	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 }
 
-// Adding Drawing3D as a child of Object3D
+// Adding Canvas3D as a child of Object3D
 p5.prototype.Canvas3D.prototype = Object.create(p5.prototype.Object3D.prototype);
-
 
 
 p5.prototype.getRects = function(array, bevel) {
@@ -212,8 +228,19 @@ p5.prototype.getRects = function(array, bevel) {
 	if (bevel) {
 		for (var x = 0; x < mat.length; x++) {
 			for (var y = 0; y < mat.length; y++) {
-				var notEdge = (x > 0 && y > 0 && x < (mat.length - 1) && y < (mat.length - 1));
-				var surrounded = (notEdge && mat[x - 1][y] && mat[x + 1][y] && mat[x][y - 1] && mat[x][y + 1]);
+				var notEdge = (x > 0 &&
+                       y > 0 &&
+                       x < (mat.length - 1) &&
+                       y < (mat.length - 1)
+                     );
+
+				var surrounded = (notEdge &&
+                          mat[x - 1][y] &&
+                          mat[x + 1][y] &&
+                          mat[x][y - 1] &&
+                          mat[x][y + 1]
+                        );
+
 				if (surrounded) {
 					inner[x][y] = 1;
 				}
