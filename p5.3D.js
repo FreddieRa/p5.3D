@@ -193,7 +193,7 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
 }
 
 
-p5.prototype.Canvas3D = function(canvas, renderer, depth, size, resolution, bevelled = false) {
+p5.prototype.Canvas3D = function(canvas, depth, size, resolution, bevelled = false) {
 	this.canvas = canvas;
 
 	this.create = function() {
