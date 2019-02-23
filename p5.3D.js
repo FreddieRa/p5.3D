@@ -183,24 +183,24 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
 p5.prototype.Picture3D.prototype = Object.create(p5.prototype.Object3D.prototype);
 
 
-p5.prototype.Drawing3D = function(canvas, renderer, depth, size, resolution, bevelled = false) {
-	this.drawing = canvas;
+p5.prototype.Canvas3D = function(canvas, renderer, depth, size, resolution, bevelled = false) {
+	this.canvas = canvas;
 
 	this.create = function() {
-		return this.drawing;
+		return this.canvas;
 	}
 
 	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
 
-	this.resX = this.drawing.width*resolution;
-	this.resY = this.drawing.height*resolution;
+	this.resX = this.canvas.width*resolution;
+	this.resY = this.canvas.height*resolution;
 
 	this.array = this.toArray(this.create());
 	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 }
 
 // Adding Drawing3D as a child of Object3D
-p5.prototype.Drawing3D.prototype = Object.create(p5.prototype.Object3D.prototype);
+p5.prototype.Canvas3D.prototype = Object.create(p5.prototype.Object3D.prototype);
 
 
 
