@@ -9,10 +9,11 @@ There are currently 4 differnt 3D objects available:
 
 All of these work by generating a canvas using "createGraphics()", and passing that into the Object3D class. This then converts that into an array of 1s and 0s (where black or dark gray pixels are 1s, everything else a 0), onto which a number of rectangles are mapped to minimize the number of primitives needing to be drawn.
 
-# Letter3D
 
 
+## Letter3D
 
+![Image of Letter](https://github.com/FreddieRa/p5.3D/blob/master/assets/letter3D.png?)
 
 
 Does what it says on the tin, Letter3D renders a letter in 3D. 
@@ -31,10 +32,10 @@ letterObject = Letter3D(
 ```
 
 
-# Word3D
+## Word3D
 
 
-
+![Image of Word](https://github.com/FreddieRa/p5.3D/blob/master/assets/word3D.png?)
 
 
 A wrapper the creates a number of Letter3D objects, and displays them with proper kerning. Takes almost identical parameters to Letter3D since most of them are just passed straight into it.
@@ -52,13 +53,11 @@ wordObject = word3D(
 )
 ```
 
-
-
-# Picture3D
-
+## Picture3D
 
 
 
+![Image of Picture](https://github.com/FreddieRa/p5.3D/blob/master/assets/picture3D.png?)
 
 This takes a black and white p5.Image object (must be created in preload or else this will only render however much has been loaded at the time), and renders it in 3D.
 
@@ -73,10 +72,9 @@ letterObject = Letter3D(
 )
 ```
 
+## Canvas3D
 
-# Canvas3D
-
-
+![Image of Canvas](https://github.com/FreddieRa/p5.3D/blob/master/assets/canvas3D.png?)
 
 
 The most general of all the functions, this doesn't create a graphic, it simply passes in an existing one. This means if you are currently creating a canvas to display something 2D as a texture in WebGL, you can instead pass that into Canvas3D and it will make a 3D object of it instead.
@@ -90,3 +88,8 @@ canvasObject = Canvas3D(
   resolution,   // A scaling factor (0.1 scales the canvas by 0.1 to reduce detail, 1 is the full scale, 0.4 is a good default) 
   bevelled,     // [OPTIONAL, default = true] Gives the bevelled, embossed 3D look (as seen in screenshot)  
 )
+```
+
+Other Examples:
+
+![Image of Chinese Character](https://github.com/FreddieRa/p5.3D/blob/master/assets/chineseCharacter3D.png)
