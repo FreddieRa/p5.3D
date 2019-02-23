@@ -90,6 +90,50 @@ canvasObject = Canvas3D(
 )
 ```
 
-Other Examples:
+# Adding Your Own Implementation
 
-![Image of Chinese Character](https://github.com/FreddieRa/p5.3D/blob/master/assets/chineseCharacter3D.png)
+An implentation will look something like this:
+
+```javascript
+p5.prototype.Example3D = function(input,
+                                   depth,
+                                   size,
+                                   resolution,
+                                   otherParameters,
+                                   bevelled = false,
+                                   optionalParameters = false
+                                   ){
+    // Instantiate variables
+    this.input = input;
+    this.otherParameters = otherParameters;
+    this.optionalParameters = optionalParameters;
+
+    // Every implementation needs a "create()" function that returns a p5.graphic
+    this.create = function() {
+        // For example, this will just create a circle of size "input"
+        // this.resX and this.resY will exist after our call to Object3D
+        var graphic = createGraphics(this.resX, this.resY);
+        graphic.background(255);
+        graphic.fill(0);
+        graphic.ellipse(graphic.width/2, graphic.height/2, this.input);
+        return graphic;
+    }
+
+    // It then needs to call p5.prototype.Object3D to get the rest of its 
+    // attributes and methods
+    p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
+
+    // Redefine the resolution as a scaling factor if you're dealing
+    // a canvas that has a different width and height
+    
+    // this.resX = 100*resolution;
+    // this.resY = 100*resolution;
+
+    // Create the array using its own "create()" and Object3D's "toArray()"
+    this.array = this.toArray(this.create());
+    // Create the array of rectangles using the "getRects()" function
+    this.rects = p5.prototype.getRects(this.array, this.bevelled);
+}
+
+
+```
