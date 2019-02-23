@@ -122,8 +122,6 @@ p5.prototype.Letter3D = function(letter, depth, size, resolution, bevelled = tru
 	}
 };
 
-// Adding Letter3D as a child of Object3D
-p5.prototype.Letter3D.prototype = Object.create(p5.prototype.Object3D.prototype);
 
 p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true, font = "Georgia", style = BOLD) {
 	this.string = string;
@@ -194,9 +192,6 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
 	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 }
 
-// Adding Picture3D as a child of Object3D
-p5.prototype.Picture3D.prototype = Object.create(p5.prototype.Object3D.prototype);
-
 
 p5.prototype.Canvas3D = function(canvas, renderer, depth, size, resolution, bevelled = false) {
 	this.canvas = canvas;
@@ -215,9 +210,6 @@ p5.prototype.Canvas3D = function(canvas, renderer, depth, size, resolution, beve
 	this.array = this.toArray(this.create());
 	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 }
-
-// Adding Canvas3D as a child of Object3D
-p5.prototype.Canvas3D.prototype = Object.create(p5.prototype.Object3D.prototype);
 
 
 p5.prototype.getRects = function(array, bevel) {
