@@ -29,14 +29,14 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
 	this.edges = [this.resX, 0]
 	this.width = 0;
 
-	this.toArray = function(graphic) {
+	this.toArray = function(graphic, mod = 0) {
 		var array = [];
 		// Put all of the non-white pixels in an array as 1s
 		graphic.loadPixels();
-		for (var x = 0; x < graphic.width; x++) {
+		for (var x = 0; x < graphic.width - mod; x++) {
 			array.push([]);
-			for (var y = 0; y < graphic.height; y++) {
-				if (graphic.get(x, y)[0] != 255) {
+			for (var y = 0; y < graphic.height - mod; y++) {
+				if (graphic.get(x, y)[0] <= 60) {
 					array[x].push(1);
 					this.edges[0] = x < this.edges[0] ? x : this.edges[0];
 					this.edges[1] = x > this.edges[1] ? x : this.edges[1];
@@ -175,7 +175,7 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
 	this.resX = this.picture.width*resolution;
 	this.resY = this.picture.height*resolution;
 
-	this.array = this.toArray(this.create());
+	this.array = this.toArray(this.create(), 1);
 	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 }
 
