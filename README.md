@@ -9,6 +9,19 @@ There are currently 4 differnt 3D objects available:
 
 All of these work by generating a canvas using "createGraphics()", and passing that into the Object3D class. This then converts that into an array of 1s and 0s (where black or dark gray pixels are 1s, everything else a 0), onto which a number of rectangles are mapped to minimize the number of primitives needing to be drawn.
 
+## Usage
+
+Each one should be first defined in "setup()" as:
+```javascript
+letter = new Letter3D(letter,depth,size,resolution,bevelled,font,style)
+```
+
+And called in "draw()" with:
+```javascript
+letter.show()
+```
+
+It follows the WebGL principle of passing in no positional parameters and requires "translate()" to move it.
 
 
 ## Letter3D
