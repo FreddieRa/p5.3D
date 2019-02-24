@@ -214,18 +214,24 @@ p5.prototype.Canvas3D = function(canvas, depth, size, resolution, bevelled = fal
 
 p5.prototype.getRects = function(array, bevel) {
     var mat = array;
+
+    // Creates a 2D array filled with 0s the same dimensions as the passed
+    // in array
     var inner = Array(mat.length).fill(0).map(x => Array(mat.length).fill(0));
     var rects = [];
 
     if (bevel) {
         for (var x = 0; x < mat.length; x++) {
             for (var y = 0; y < mat.length; y++) {
+                // Makes sure it isn't on any of the edges since that would
+                // cause the next check to break
                 var notEdge = (x > 0 &&
                                y > 0 &&
                                x < (mat.length - 1) &&
                                y < (mat.length - 1)
                               );
 
+                // Checks to see if it has pixels on every side
                 var surrounded = (notEdge &&
                                   mat[x - 1][y] &&
                                   mat[x + 1][y] &&
@@ -239,6 +245,8 @@ p5.prototype.getRects = function(array, bevel) {
             }
         }
         for (var item of getRects1(inner)) {
+            // This is used later to make the inner ones even thicker
+            // to give the bevelled look
             item.b = 1.5;
             rects.push(item);
         }
@@ -252,8 +260,9 @@ p5.prototype.getRects = function(array, bevel) {
 }
 
 function getRects1(array) {
+    // Coordinates are done as (x,y) but actually indexing an array like
+    // this is [y][x], so the array is transposed
     var mat = array[0].map((col, i) => array.map(row => row[i]));
-
 
     const W = mat[0].length;
     const H = mat.length;
