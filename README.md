@@ -3,7 +3,7 @@ A library extending the functionality of WebGL allowing users to easily create 3
 
 ![P5.3D](https://openprocessing-usercontent.s3.amazonaws.com/files/user113782/visual669863/hb22e8c75db748b34dda77dbf19996615/P53DImage.png)
 
-There are currently 4 differnt 3D objects available:
+There are currently 4 different 3D objects available:
 
  - [Letter3D](https://github.com/FreddieRa/p5.3D/wiki/Letter3D)
  - [Word3D](https://github.com/FreddieRa/p5.3D/wiki/Word3D)
