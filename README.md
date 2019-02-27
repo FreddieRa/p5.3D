@@ -13,4 +13,4 @@ There are currently 4 different 3D objects available:
  
 All of these work by generating a canvas using "createGraphics()", and passing that into the Object3D class. This then converts that into an array of 1s and 0s (where black or dark gray pixels are 1s, everything else a 0), onto which a number of rectangles are mapped to minimize the number of primitives needing to be drawn.
 
-Check out the [wiki](https://github.com/FreddieRa/p5.3D/wiki) to see how they work!
+Check out the [wiki](https://github.com/FreddieRa/p5.3D/wiki) to see how they work, or read my [article](https://www.openprocessing.org/sketch/674191) on OpenProcessing!
