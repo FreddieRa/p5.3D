@@ -87,13 +87,14 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled, threshold) {
 p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true, font = "Times New Roman", style = BOLD) {
 	// Adds spaces for kerning
 	this.string = string.split("").join(String.fromCharCode(8202));
+	this.stringLength = string.length;
 	this.font = font;
 	this.style = style;
 	this.threshold = 160; // Magic number, works well for text
 
 	this.create = function() {
 		// Create the 2D graphic
-		var graphic = createGraphics(this.resX*this.string.length, this.resY);
+		var graphic = createGraphics(this.resX*this.stringLength, this.resY);
 		// Draw the given string in the centre
 		graphic.textAlign(CENTER, CENTER);
 		graphic.textSize(this.resX * 6 / 5);
@@ -110,7 +111,7 @@ p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true,
 	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 
 	this.modX = function() {
-		return (this.resX*this.string.length / 2)
+		return (this.resX*this.stringLength / 2)
 	}
 };
 
