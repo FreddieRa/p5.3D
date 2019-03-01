@@ -88,83 +88,37 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
         }
         pop();
     }
-}
-
-
-p5.prototype.Letter3D = function(letter, depth, size, resolution, bevelled = true, font = "Georgia", style = BOLD) {
-    this.letter = letter;
-    this.font = font;
-    this.style = style;
-
-    this.create = function() {
-        // Create the 2D graphic
-        var graphic = createGraphics(this.resX, this.resY);
-        // Draw the given character in the centre
-        graphic.textAlign(CENTER, CENTER);
-        graphic.textSize(this.resX * 6 / 5);
-        graphic.textFont(this.font);
-        graphic.textStyle(this.style);
-        graphic.background(255);
-        graphic.text(this.letter, graphic.width / 2, graphic.height / 2);
-
-        return graphic;
-    }
-
-    // Load in attributes and functions from Object3D
-    p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
-    // Create the array using its own "create()" and Object3D's "toArray()"
-    this.array = this.toArray(this.create());
-    this.rects = p5.prototype.getRects(this.array, this.bevelled);
-
-    // Custom "modX()"" function so that Word3D can centre letters properly
-    this.modX = function() {
-        return this.edges[0]
-    }
 };
 
 
-p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true, font = "Georgia", style = BOLD) {
-    this.string = string;
-    this.depth = depth;
-    this.size = size;
-    this.res = resolution;
-    this.bevelled = bevelled;
-    this.font = font;
-    this.style = style;
-    this.width = 0;
+p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true, font = "Times New Roman", style = BOLD) {
+	// Adds spaces for kerning
+	this.string = string.split("").join(String.fromCharCode(8202));
+	this.font = font;
+	this.style = style;
 
-    this.create = function() {
-        var array = [];
-        this.width = 0;
-        for (var i = 0; i < string.length; i++) {
-            var temp = new p5.prototype.Letter3D(
-                string[i], this.depth, this.size, this.res, this.bevelled, this.font, this.style
-            );
-            this.width += temp.width;
-            array.push(temp);
-        }
+	this.create = function() {
+		// Create the 2D graphic
+		var graphic = createGraphics(this.resX*this.string.length, this.resY);
+		// Draw the given string in the centre
+		graphic.textAlign(CENTER, CENTER);
+		graphic.textSize(this.resX * 6 / 5);
+		graphic.textFont(font);
+		graphic.textStyle(style);
+		graphic.background(255);
+		graphic.text(this.string, graphic.width / 2, graphic.height / 2);
 
-        return array;
-    }
+		return graphic;
+	}
 
-    this.letters = this.create();
+	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
+	this.array = this.toArray(this.create());
+	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 
-    this.setText = function(string) {
-        this.string = string;
-        this.create();
-    }
-
-    this.show = function() {
-        push();
-        translate(-this.width * this.size * 0.5, 0, 0); // Centre the word
-        for (var letter of this.letters) {
-            letter.show();
-            // Kerning to make sure that each letter is close to one another
-            translate((letter.width) * this.size, 0, 0);
-        }
-        pop();
-    }
-}
+	this.modX = function() {
+		return (this.resX*this.string.length / 2)
+	}
+};
 
 
 p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = false) {
