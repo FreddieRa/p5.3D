@@ -3,7 +3,7 @@ A library extending the functionality of WebGL allowing users to easily create 3
 
 ![P5.3D](https://user-images.githubusercontent.com/14854492/53637511-3efc0c80-3c1b-11e9-946c-7be4a2863d75.png)
 
-There are currently 4 different 3D objects available:
+There are currently 3 different 3D objects available:
 
  - [Word3D](https://github.com/FreddieRa/p5.3D/wiki/Word3D)
  - [Picture3D](https://github.com/FreddieRa/p5.3D/wiki/Picture3D)
