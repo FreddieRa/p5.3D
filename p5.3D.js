@@ -18,12 +18,13 @@
 //                         p5.3D
 // =============================================================================
 
-p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
+p5.prototype.Object3D = function(depth, size, resolution, bevelled, threshold) {
     this.depth = depth; // Depth in the z axis
     this.size = size; // Size that each "pixel" (cube) is
     this.resX = resolution; // Size of graphic on which it's rendered (x-axis)
     this.resY = resolution; // Size of graphic on which it's rendered (y-axis)
     this.bevelled = bevelled; // Whether or not it has the inner emboss for 3D
+    this.threshold = threshold; // Lightest grey accepted as pixel
 
     this.edges = [this.resX, 0] // Index of left and right-most pixel
     this.width = 0; // Total width of actual result (not including white pixels)
@@ -36,7 +37,7 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
         for (var x = 0; x < graphic.width - mod; x++) {
             array.push([]);
             for (var y = 0; y < graphic.height - mod; y++) {
-                if (graphic.get(x, y)[0] <= 60) {
+                if (graphic.get(x, y)[0] <= this.threshold) {
                     array[x].push(1);
                     // Update edges
                     this.edges[0] = x < this.edges[0] ? x : this.edges[0];
@@ -46,14 +47,6 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled) {
                 }
             }
         }
-
-        // Constrain is needed for characters like "space" that otherwise
-        // have a negative width
-        this.width = constrain(
-          Math.abs(this.edges[1] - this.edges[0] + 4),
-          this.resX * 0.4,
-          this.resX * 1.1
-        );
 
         return array;
     }
@@ -96,6 +89,7 @@ p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true,
 	this.string = string.split("").join(String.fromCharCode(8202));
 	this.font = font;
 	this.style = style;
+	this.threshold = 160; // Magic number, works well for text
 
 	this.create = function() {
 		// Create the 2D graphic
@@ -111,7 +105,7 @@ p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true,
 		return graphic;
 	}
 
-	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
+	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled, this.threshold);
 	this.array = this.toArray(this.create());
 	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 
@@ -123,6 +117,7 @@ p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true,
 
 p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = false) {
     this.picture = picture; // Letter
+    this.threshold = 60; // Magic number good for images
 
     this.create = function() {
         // Create the 2D graphic
@@ -135,7 +130,7 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
         return graphic;
     }
 
-    p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
+    p5.prototype.Object3D.call(this, depth, size, resolution, bevelled, this.threshold);
 
     // Redefine the resolution as a scaling of the width and height
     this.resX = this.picture.width*resolution;
@@ -149,12 +144,13 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
 
 p5.prototype.Canvas3D = function(canvas, depth, size, resolution, bevelled = false) {
     this.canvas = canvas;
+    this.threshold = 60; // Magic number good for canvases
 
     this.create = function() {
         return this.canvas;
     }
 
-    p5.prototype.Object3D.call(this, depth, size, resolution, bevelled);
+    p5.prototype.Object3D.call(this, depth, size, resolution, bevelled, this.threshold);
 
     // Redefine the resolution as a scaling of the width and height
     this.resX = this.canvas.width*resolution;
