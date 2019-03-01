@@ -1,11 +1,10 @@
 # p5.3D
 A library extending the functionality of WebGL allowing users to easily create 3D objects.
 
-![P5.3D](https://openprocessing-usercontent.s3.amazonaws.com/files/user113782/visual669863/hb22e8c75db748b34dda77dbf19996615/P53DImage.png)
+![P5.3D](https://user-images.githubusercontent.com/14854492/53637511-3efc0c80-3c1b-11e9-946c-7be4a2863d75.png)
 
 There are currently 4 different 3D objects available:
 
- - [Letter3D](https://github.com/FreddieRa/p5.3D/wiki/Letter3D)
  - [Word3D](https://github.com/FreddieRa/p5.3D/wiki/Word3D)
  - [Picture3D](https://github.com/FreddieRa/p5.3D/wiki/Picture3D)
  - [Canvas3D](https://github.com/FreddieRa/p5.3D/wiki/Canvas3D)
