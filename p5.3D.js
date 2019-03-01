@@ -97,7 +97,7 @@ p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true,
 		var graphic = createGraphics(this.resX*this.stringLength, this.resY);
 		// Draw the given string in the centre
 		graphic.textAlign(CENTER, CENTER);
-		graphic.textSize(this.resX * 6 / 5);
+		graphic.textSize(this.resX);
 		graphic.textFont(font);
 		graphic.textStyle(style);
 		graphic.background(255);
