@@ -134,8 +134,8 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
     p5.prototype.Object3D.call(this, depth, size, resolution, bevelled, this.threshold);
 
     // Redefine the resolution as a scaling of the width and height
-    this.resX = this.picture.width*resolution;
-    this.resY = this.picture.height*resolution;
+    this.resX = int(this.picture.width*resolution);
+    this.resY = int(this.picture.height*resolution);
 
     // Create the array using its own "create()" and Object3D's "toArray()"
     this.array = this.toArray(this.create(), 1);
