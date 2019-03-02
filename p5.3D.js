@@ -214,6 +214,7 @@ function getRects1(array) {
     // Coordinates are done as (x,y) but actually indexing an array like
     // this is [y][x], so the array is transposed
     var mat = array[0].map((col, i) => array.map(row => row[i]));
+    var index = 0;
 
     const W = mat[0].length;
     const H = mat.length;
@@ -231,13 +232,14 @@ function getRects1(array) {
 
     // find all rectangle until their area matches the total
     while (rectArea < totalRectArea) {
-        const rect = findNextRect();
+        const rect = findNextRect(index);
+	index ++;
         rects.push(rect);
         markRect(rect);
         rectArea += (rect.x2 - rect.x1 + 1) * (rect.y2 - rect.y1 + 1);
     }
 
-    function findNextRect() {
+    function findNextRect(indexNum) {
         // find top left corner
         let foundCorner = false;
         const rect = {
@@ -245,7 +247,7 @@ function getRects1(array) {
             x2: W - 1,
             y1: 0,
             y2: H - 1,
-	    angle: random(0, 0.4) // Used to enable effects
+	    number: indexNum,       // Used to enable individual control
         };
         for (let i = 0; i < W; ++i) {
             for (let j = 0; j < H; ++j) {
