@@ -244,7 +244,8 @@ function getRects1(array) {
             x1: 0,
             x2: W - 1,
             y1: 0,
-            y2: H - 1
+            y2: H - 1,
+	    angle: random(0, 0.4) // Used to enable effects
         };
         for (let i = 0; i < W; ++i) {
             for (let j = 0; j < H; ++j) {
