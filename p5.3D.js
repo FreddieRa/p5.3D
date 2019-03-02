@@ -54,11 +54,11 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled, threshold) {
     // modX and modY are needed so implementations can customise how
     // they're centred (e.g. letter3D)
 
-    this.modX = function() {
+    this.modX = function(Rect) {
         return (this.resX / 2)
     }
 
-    this.modY = function() {
+    this.modY = function(Rect) {
         return (this.resY / 2)
     }
 
@@ -69,8 +69,8 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled, threshold) {
         for (var Rect of this.rects) {
             var w = Rect.x2 - Rect.x1 + 1;
             var h = Rect.y2 - Rect.y1 + 1;
-            var xPos = Rect.x1 + w / 2 - this.modX();
-            var yPos = Rect.y1 + h / 2 - this.modY();
+            var xPos = Rect.x1 + w / 2 - this.modX(Rect);
+            var yPos = Rect.y1 + h / 2 - this.modY(Rect);
 
             push();
 
