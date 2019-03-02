@@ -138,7 +138,7 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
     this.resY = int(this.picture.height*resolution);
 
     // Create the array using its own "create()" and Object3D's "toArray()"
-    this.array = this.toArray(this.create(), 0);
+    this.array = this.toArray(this.create(), 1);
     this.rects = p5.prototype.getRects(this.array, this.bevelled);
 }
 
