@@ -55,11 +55,15 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled, threshold) {
     // they're centred (e.g. letter3D)
 
     this.modX = function(Rect) {
-        return (this.resX / 2)
+        return (this.resX / 2);
     }
 
     this.modY = function(Rect) {
-        return (this.resY / 2)
+        return (this.resY / 2);
+    }
+	
+    this.modZ = function(Rect) {
+	return (0);
     }
 
     // this.rects doesn't exist in the base implementation, it's created by
@@ -71,10 +75,11 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled, threshold) {
             var h = Rect.y2 - Rect.y1 + 1;
             var xPos = Rect.x1 + w / 2 - this.modX(Rect);
             var yPos = Rect.y1 + h / 2 - this.modY(Rect);
+	    var zPos = - this.modZ(Rect);
 
             push();
 
-            translate(xPos * this.size, yPos * this.size, 0);
+            translate(xPos * this.size, yPos * this.size, zPos * this.size);
             // Rect.b here is either 1 or 1.5, depending on whether bevelled is true
             box(w * this.size, h * this.size, this.depth * this.size * Rect.b);
             pop();
