@@ -51,8 +51,8 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled, threshold) {
         return array;
     }
 
-    // modX and modY are needed so implementations can customise how
-    // they're centred (e.g. letter3D)
+    // modX, modY, and modZ are needed so implementations can customise how
+    // they're displayed, or add effects
 
     this.modX = function(Rect) {
         return (this.resX / 2);
