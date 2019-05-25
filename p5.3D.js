@@ -89,7 +89,7 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled, threshold) {
 };
 
 
-p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true, font = "Times New Roman", style = BOLD) {
+p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true, font = "Times New Roman", style = "bold") {
 	// Adds spaces for kerning
 	this.string = string.split("").join(String.fromCharCode(8202));
 	this.stringLength = string.length;
