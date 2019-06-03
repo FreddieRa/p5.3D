@@ -135,7 +135,7 @@ p5.prototype.createWord3D = function(string, depth = 6, size = 10, resolution = 
     return new p5.prototype.Word3D(p = this, string, depth, size, resolution, bevelled, font, style);
 }
 
-p5.prototype.Picture3D = function(p, picture, depth, size, resolution, bevelled = false) {
+p5.prototype.Picture3D = function(p, picture, depth, size, resolution, bevelled) {
     this.picture = picture; // Letter
     this.threshold = 60; // Magic number good for images
 
@@ -162,11 +162,11 @@ p5.prototype.Picture3D = function(p, picture, depth, size, resolution, bevelled 
 }
 
 p5.prototype.createPicture3D = function(picture, depth = 6, size = 10, resolution = 50, bevelled = false) {
-    return new p5.prototype.Picture3D(p = this, picture, depth, size, resolution, bevelled = false);
+    return new p5.prototype.Picture3D(p = this, picture, depth, size, resolution, bevelled);
 }
 
 
-p5.prototype.Canvas3D = function(p, canvas, depth, size, resolution, bevelled = false) {
+p5.prototype.Canvas3D = function(p, canvas, depth, size, resolution, bevelled) {
     this.canvas = canvas;
     this.threshold = 60; // Magic number good for canvases
 
@@ -186,7 +186,7 @@ p5.prototype.Canvas3D = function(p, canvas, depth, size, resolution, bevelled = 
 }
 
 p5.prototype.createCanvas3D = function(picture, depth = 6, size = 10, resolution = 50, bevelled = false) {
-    return new p5.prototype.Canvas3D(p = this, picture, depth, size, resolution, bevelled = false);
+    return new p5.prototype.Canvas3D(p = this, picture, depth, size, resolution, bevelled);
 }
 
 
