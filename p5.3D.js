@@ -1,3 +1,14 @@
+
+
+
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd)
+      define('p5.3D', ['p5'], function (p5) { (factory(p5));});
+    else if (typeof exports === 'object')
+      factory(require('../p5'));
+    else
+      factory(root['p5']);
+  }(this, function (p5) {
 /* p5.3D.js v0.0.1 2019-02-22 */
 /**
  * @module p5.3D
@@ -18,7 +29,7 @@
 //                         p5.3D
 // =============================================================================
 
-p5.prototype.Object3D = function(depth, size, resolution, bevelled, threshold) {
+p5.prototype.Object3D = function(p, depth, size, resolution, bevelled, threshold) {
     this.depth = depth; // Depth in the z axis
     this.size = size; // Size that each "pixel" (cube) is
     this.resX = resolution; // Size of graphic on which it's rendered (x-axis)
@@ -69,27 +80,27 @@ p5.prototype.Object3D = function(depth, size, resolution, bevelled, threshold) {
     // this.rects doesn't exist in the base implementation, it's created by
     // the child class (this means that something cannot be a pure Object3D)
     this.show = function() {
-        push();
+        p.push();
         for (var Rect of this.rects) {
             var w = Rect.x2 - Rect.x1 + 1;
             var h = Rect.y2 - Rect.y1 + 1;
             var xPos = Rect.x1 + w / 2 - this.modX(Rect);
             var yPos = Rect.y1 + h / 2 - this.modY(Rect);
-	    var zPos = - this.modZ(Rect);
+	        var zPos = - this.modZ(Rect);
 
-            push();
-
-            translate(xPos * this.size, yPos * this.size, zPos * this.size);
+            p.push();
+            p.normalMaterial();
+            p.translate(xPos * this.size, yPos * this.size, zPos * this.size);
             // Rect.b here is either 1 or 1.5, depending on whether bevelled is true
-            box(w * this.size, h * this.size, this.depth * this.size * Rect.b);
-            pop();
+            p.box(w * this.size, h * this.size, this.depth * this.size * Rect.b);
+            p.pop();
         }
-        pop();
+        p.pop();
     }
 };
 
 
-p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true, font = "Times New Roman", style = "bold") {
+p5.prototype.Word3D = function(p, string, depth, size , resolution, bevelled, font, style) {
 	// Adds spaces for kerning
 	this.string = string.split("").join(String.fromCharCode(8202));
 	this.stringLength = string.length;
@@ -99,9 +110,9 @@ p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true,
 
 	this.create = function() {
 		// Create the 2D graphic
-		var graphic = createGraphics(this.resX*this.stringLength, this.resY);
+		var graphic = p.createGraphics(this.resX*this.stringLength, this.resY);
 		// Draw the given string in the centre
-		graphic.textAlign(CENTER, CENTER);
+		graphic.textAlign("center", "center");
 		graphic.textSize(this.resX);
 		graphic.textFont(font);
 		graphic.textStyle(style);
@@ -111,7 +122,7 @@ p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true,
 		return graphic;
 	}
 
-	p5.prototype.Object3D.call(this, depth, size, resolution, bevelled, this.threshold);
+	p5.prototype.Object3D.call(this, p, depth, size, resolution, bevelled, this.threshold);
 	this.array = this.toArray(this.create());
 	this.rects = p5.prototype.getRects(this.array, this.bevelled);
 
@@ -120,14 +131,17 @@ p5.prototype.Word3D = function(string, depth, size, resolution, bevelled = true,
 	}
 };
 
+p5.prototype.createWord3D = function(string, depth = 6, size = 10, resolution = 50, bevelled = true, font = "Times New Roman", style = "bold") {
+    return new p5.prototype.Word3D(p = this, string, depth, size, resolution, bevelled, font, style);
+}
 
-p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = false) {
+p5.prototype.Picture3D = function(p, picture, depth, size, resolution, bevelled = false) {
     this.picture = picture; // Letter
     this.threshold = 60; // Magic number good for images
 
     this.create = function() {
         // Create the 2D graphic
-        var graphic = createGraphics(this.resX, this.resY);
+        var graphic = p.createGraphics(this.resX, this.resY);
 
         // Draw the given picture in the corner
         graphic.background(255, 255, 255, 255);
@@ -136,7 +150,7 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
         return graphic;
     }
 
-    p5.prototype.Object3D.call(this, depth, size, resolution, bevelled, this.threshold);
+    p5.prototype.Object3D.call(this, p, depth, size, resolution, bevelled, this.threshold);
 
     // Redefine the resolution as a scaling of the width and height
     this.resX = int(this.picture.width*resolution);
@@ -147,8 +161,12 @@ p5.prototype.Picture3D = function(picture, depth, size, resolution, bevelled = f
     this.rects = p5.prototype.getRects(this.array, this.bevelled);
 }
 
+p5.prototype.createPicture3D = function(picture, depth = 6, size = 10, resolution = 50, bevelled = false) {
+    return new p5.prototype.Picture3D(p = this, picture, depth, size, resolution, bevelled = false);
+}
 
-p5.prototype.Canvas3D = function(canvas, depth, size, resolution, bevelled = false) {
+
+p5.prototype.Canvas3D = function(p, canvas, depth, size, resolution, bevelled = false) {
     this.canvas = canvas;
     this.threshold = 60; // Magic number good for canvases
 
@@ -156,7 +174,7 @@ p5.prototype.Canvas3D = function(canvas, depth, size, resolution, bevelled = fal
         return this.canvas;
     }
 
-    p5.prototype.Object3D.call(this, depth, size, resolution, bevelled, this.threshold);
+    p5.prototype.Object3D.call(this, p, depth, size, resolution, bevelled, this.threshold);
 
     // Redefine the resolution as a scaling of the width and height
     this.resX = this.canvas.width*resolution;
@@ -165,6 +183,10 @@ p5.prototype.Canvas3D = function(canvas, depth, size, resolution, bevelled = fal
     // Create the array using its own "create()" and Object3D's "toArray()"
     this.array = this.toArray(this.create());
     this.rects = p5.prototype.getRects(this.array, this.bevelled);
+}
+
+p5.prototype.createCanvas3D = function(picture, depth = 6, size = 10, resolution = 50, bevelled = false) {
+    return new p5.prototype.Canvas3D(p = this, picture, depth, size, resolution, bevelled = false);
 }
 
 
@@ -300,3 +322,5 @@ function getRects1(array) {
 
 //
 //
+
+}))
