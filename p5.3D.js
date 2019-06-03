@@ -133,7 +133,7 @@ p5.prototype.Word3D = function(p, string, depth, size , resolution, bevelled, fo
 
 p5.prototype.createWord3D = function(string, depth = 6, size = 10, resolution = 50, bevelled = true, font = "Times New Roman", style = "bold") {
     return new p5.prototype.Word3D(p = this, string, depth, size, resolution, bevelled, font, style);
-}
+};
 
 p5.prototype.Picture3D = function(p, picture, depth, size, resolution, bevelled) {
     this.picture = picture; // Letter
@@ -159,11 +159,11 @@ p5.prototype.Picture3D = function(p, picture, depth, size, resolution, bevelled)
     // Create the array using its own "create()" and Object3D's "toArray()"
     this.array = this.toArray(this.create(), 1);
     this.rects = p5.prototype.getRects(this.array, this.bevelled);
-}
+};
 
 p5.prototype.createPicture3D = function(picture, depth = 6, size = 10, resolution = 50, bevelled = false) {
     return new p5.prototype.Picture3D(p = this, picture, depth, size, resolution, bevelled);
-}
+};
 
 
 p5.prototype.Canvas3D = function(p, canvas, depth, size, resolution, bevelled) {
@@ -183,11 +183,11 @@ p5.prototype.Canvas3D = function(p, canvas, depth, size, resolution, bevelled) {
     // Create the array using its own "create()" and Object3D's "toArray()"
     this.array = this.toArray(this.create());
     this.rects = p5.prototype.getRects(this.array, this.bevelled);
-}
+};
 
 p5.prototype.createCanvas3D = function(picture, depth = 6, size = 10, resolution = 50, bevelled = false) {
     return new p5.prototype.Canvas3D(p = this, picture, depth, size, resolution, bevelled);
-}
+};
 
 
 p5.prototype.getRects = function(array, bevel) {
@@ -235,7 +235,7 @@ p5.prototype.getRects = function(array, bevel) {
     }
 
     return rects;
-}
+};
 
 function getRects1(array) {
     // Coordinates are done as (x,y) but actually indexing an array like
